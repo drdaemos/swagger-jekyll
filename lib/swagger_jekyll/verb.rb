@@ -9,6 +9,7 @@ module SwaggerJekyll
 
     def to_liquid
       @hash.dup.merge(
+        'verb' => @verb,
         'responses' => responses,
         'sample_response' => sample_response)
     end

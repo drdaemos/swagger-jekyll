@@ -16,7 +16,11 @@ module SwaggerJekyll
     end
 
     def verbs
-      verbs_hash
+      verbs_hash.values
+    end
+
+    def verb(name)
+      verbs_hash[name]
     end
 
     private

@@ -1,5 +1,6 @@
 module SwaggerJekyll
   class Schema < Struct.new(:name, :hash, :specification)
+    attr_accessor :properties
     def to_liquid
       {
         'name' => name,
@@ -35,8 +36,12 @@ module SwaggerJekyll
       ''
     end
 
+    def property(name)
+      properties_hash[name]
+    end
+
     def properties
-      []
+      properties_hash.values
     end
 
     def self.factory(name, hash, specification)
@@ -60,6 +65,19 @@ module SwaggerJekyll
           fail "Unhandled property type: #{hash.inspect}"
         end
       end
+    end
+
+    private
+
+    def properties_hash
+      if @_properties_hash.nil?
+        @_properties_hash = {}
+        hash['properties'].each do |name, property_hash|
+          @_properties_hash[code] = Schema.factory(name, property_hash, specification)
+        end
+      end
+
+      @_properties_hash
     end
   end
 end
