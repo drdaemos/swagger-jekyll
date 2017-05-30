@@ -20,7 +20,9 @@ module SwaggerJekyll
     end
 
     def verb(name)
-      verbs_hash[name]
+      if verbs_hash.key?(name)
+        verbs_hash[name]
+      end
     end
 
     private

@@ -57,7 +57,7 @@ module SwaggerJekyll
     end
 
     def inspect
-      "<<specification>>"
+      "<<SwaggerJekyll::Specification>>"
     end
 
     private

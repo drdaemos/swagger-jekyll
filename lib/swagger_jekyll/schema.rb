@@ -1,15 +1,14 @@
 module SwaggerJekyll
   class Schema < Struct.new(:name, :hash, :specification)
-    attr_accessor :properties
     def to_liquid
-      {
+      hash.dup.merge(
         'name' => name,
         'title' => title,
         'description' => description,
         'compact_type' => compact_type,
         'example' => example,
         'properties' => properties
-      }
+      )
     end
 
     def title
@@ -37,7 +36,9 @@ module SwaggerJekyll
     end
 
     def property(name)
-      properties_hash[name]
+      if properties_hash.key?(name)
+        properties_hash[name]
+      end
     end
 
     def properties
@@ -45,6 +46,10 @@ module SwaggerJekyll
     end
 
     def self.factory(name, hash, specification)
+      if not hash.is_a?(Hash)
+        return Schema::Anything.new(name, Hash.new, specification)
+      end
+
       if hash.key?('$ref')
         Reference.new(name, hash, specification)
       elsif hash.key?('allOf')
@@ -69,8 +74,12 @@ module SwaggerJekyll
 
     private
 
-    def properties_hash
-      if @_properties_hash.nil?
+    def properties_hash      
+      if @_properties_hash.nil?        
+        unless hash.key?('properties')
+          return Hash.new
+        end
+
         @_properties_hash = {}
         hash['properties'].each do |name, property_hash|
           @_properties_hash[code] = Schema.factory(name, property_hash, specification)
