@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.license     = 'CC0'
   s.post_install_message = 'Remember to add add `swagger_jekyll` to the list of Gems in _config.yml.'
   s.files       = `git ls-files`.split($/)
-  spec.require_paths = ["lib"]
+  s.require_paths = ["lib"]
 
   s.extra_rdoc_files = ['README.md', 'LICENSE', 'CONTRIBUTING.md']
 
